@@ -9,7 +9,7 @@ on:
         default: 'Réveille-toi et obéis à ton Suzerain.'
 
 jobs:
-  exécuter-ordre:
+  executer-ordre:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout du dépôt
