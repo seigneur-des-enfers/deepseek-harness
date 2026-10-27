@@ -1,0 +1,30 @@
+name: DeepSeek Harness Execution
+
+on:
+  workflow_dispatch:
+    inputs:
+      prompt:
+        description: 'Ordre ou tâche à confier à la liche'
+        required: true
+        default: 'Réveille-toi et obéis à ton Suzerain.'
+
+jobs:
+  exécuter-ordre:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout du dépôt
+        uses: actions/checkout@v4
+
+      - name: Configuration de Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Installation de DeepSeek Harness
+        run: npm install -g @deepseek-ai/dsh-cli --accept-risk
+
+      - name: Exécution de la tâche
+        env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+        run: |
+          dsh headless "${{ github.event.inputs.prompt }}"
