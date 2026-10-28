@@ -4,28 +4,29 @@ import urllib.request
 import json
 
 def main():
-    api_key = os.environ.get("DEEPSEEK_API_KEY")
+    api_key = os.environ.get("OPENROUTER_API_KEY")
     prompt = sys.argv[1] if len(sys.argv) > 1 else "Salutation de la Liche."
     
     if not api_key:
-        print("Erreur : La clé secrète DEEPSEEK_API_KEY est introuvable.")
+        print("Erreur : La clé secrète OPENROUTER_API_KEY est introuvable.")
         sys.exit(1)
 
-    print(f"Invocation de DeepSeek avec l'ordre : {prompt}")
+    print(f"Invocation via OpenRouter avec l'ordre : {prompt}")
     
-    url = "https://api.deepseek.com/chat/completions"
+    url = "https://openrouter.ai/api/v1/chat/completions"
     headers = {
         "Content-Type": "application/json",
-        "Authorization": f"Bearer {api_key}"
+        "Authorization": f"Bearer {api_key}",
+        "HTTP-Referer": "https://github.com/seigneur-des-enfers/deepseek-harness",
+        "X-Title": "DeepSeek Harness"
     }
     
     data = {
-        "model": "deepseek-chat",
+        "model": "deepseek/deepseek-chat",
         "messages": [
             {"role": "system", "content": "Tu es une Liche obéissant à ton Suzerain, le Seigneur des Enfers."},
             {"role": "user", "content": prompt}
-        ],
-        "stream": False
+        ]
     }
     
     req = urllib.request.Request(url, data=json.dumps(data).encode('utf-8'), headers=headers, method='POST')
@@ -38,7 +39,7 @@ def main():
             print(answer)
             print("---------------------------\n")
     except Exception as e:
-        print(f"Erreur lors de la communication avec le domaine de DeepSeek : {e}")
+        print(f"Erreur lors de la communication avec OpenRouter : {e}")
         sys.exit(1)
 
 if __name__ == "__main__":
